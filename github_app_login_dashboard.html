@@ -1,0 +1,259 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Syne',sans-serif;}
+
+.app{background:#07090d;min-height:600px;border-radius:12px;overflow:hidden;position:relative;color:#e2f0ff;}
+
+/* GRID BG */
+.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,210,255,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,0.04) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0;}
+
+/* SCREENS */
+.screen{position:absolute;inset:0;transition:opacity 0.4s,transform 0.4s;z-index:1;}
+.screen.hidden{opacity:0;pointer-events:none;transform:scale(0.97);}
+
+/* ====== LOGIN ====== */
+.login-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:600px;padding:40px;}
+
+.logo{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:#fff;letter-spacing:-1px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.logo-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);display:flex;align-items:center;justify-content:center;font-size:18px;}
+.logo-sub{font-family:'Space Mono',monospace;font-size:11px;color:#3a5a78;margin-bottom:36px;letter-spacing:2px;text-transform:uppercase;}
+
+.login-card{background:rgba(255,255,255,0.03);border:1px solid rgba(0,210,255,0.12);border-radius:14px;padding:36px 40px;width:100%;max-width:380px;}
+
+.login-title{font-size:20px;font-weight:800;color:#fff;margin-bottom:4px;}
+.login-sub{font-size:13px;color:#3a5a78;margin-bottom:28px;}
+
+.field{margin-bottom:16px;}
+.field label{display:block;font-family:'Space Mono',monospace;font-size:11px;color:#4a7a98;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.field input{width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(0,210,255,0.15);border-radius:8px;padding:11px 14px;font-family:'Space Mono',monospace;font-size:13px;color:#e2f0ff;outline:none;transition:border-color 0.2s;}
+.field input:focus{border-color:rgba(0,210,255,0.5);}
+.field input::placeholder{color:#2a4a62;}
+
+.forgot{text-align:right;margin-top:-8px;margin-bottom:20px;}
+.forgot a{font-family:'Space Mono',monospace;font-size:11px;color:#3a5a78;text-decoration:none;cursor:pointer;}
+.forgot a:hover{color:#00d2ff;}
+
+.btn-login{width:100%;padding:13px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:#fff;cursor:pointer;transition:opacity 0.2s;letter-spacing:0.5px;}
+.btn-login:hover{opacity:0.88;}
+.btn-login:active{opacity:0.75;}
+
+.divider-or{display:flex;align-items:center;gap:12px;margin:20px 0;}
+.divider-or span{font-family:'Space Mono',monospace;font-size:11px;color:#2a4a62;}
+.divider-or::before,.divider-or::after{content:'';flex:1;height:1px;background:rgba(0,210,255,0.1);}
+
+.btn-gh{width:100%;padding:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:8px;font-family:'Space Mono',monospace;font-size:12px;color:#8ba8c4;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-gh:hover{border-color:rgba(0,210,255,0.3);color:#00d2ff;}
+
+.gh-icon{width:18px;height:18px;fill:#8ba8c4;}
+.btn-gh:hover .gh-icon{fill:#00d2ff;}
+
+.signup-link{text-align:center;margin-top:20px;font-family:'Space Mono',monospace;font-size:11px;color:#2a4a62;}
+.signup-link a{color:#00d2ff;text-decoration:none;cursor:pointer;}
+
+.err{font-family:'Space Mono',monospace;font-size:11px;color:#ff5c6a;margin-top:10px;display:none;}
+
+/* ====== DASHBOARD ====== */
+.dash-screen{min-height:600px;}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid rgba(0,210,255,0.08);position:relative;z-index:2;}
+.top-logo{font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px;}
+.top-logo-icon{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,#00d2ff,#7b2ff7);display:flex;align-items:center;justify-content:center;font-size:13px;}
+.top-nav{display:flex;gap:4px;}
+.nav-btn{font-family:'Space Mono',monospace;font-size:11px;color:#4a6a88;padding:6px 12px;border-radius:6px;cursor:pointer;border:none;background:none;transition:all 0.2s;}
+.nav-btn:hover,.nav-btn.active{color:#00d2ff;background:rgba(0,210,255,0.08);}
+.top-user{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00d2ff,#7b2ff7);display:flex;align-items:center;justify-content:center;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:#fff;cursor:pointer;}
+.btn-out{font-family:'Space Mono',monospace;font-size:10px;color:#3a5a78;background:none;border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:5px 10px;cursor:pointer;transition:all 0.2s;}
+.btn-out:hover{color:#ff5c6a;border-color:rgba(255,92,106,0.3);}
+
+.dash-content{padding:24px;position:relative;z-index:1;}
+
+.welcome-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.welcome-text{font-size:18px;font-weight:800;color:#fff;}
+.welcome-text span{color:#00d2ff;}
+.online-badge{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:10px;color:#00ff88;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.2);border-radius:20px;padding:4px 10px;}
+.pulse-g{width:6px;height:6px;background:#00ff88;border-radius:50%;animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;}
+.stat{background:rgba(255,255,255,0.03);border:1px solid rgba(0,210,255,0.1);border-radius:8px;padding:14px 16px;text-align:center;transition:border-color 0.2s;}
+.stat:hover{border-color:rgba(0,210,255,0.3);}
+.stat-n{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:#00d2ff;}
+.stat-l{font-size:11px;color:#3a5a78;margin-top:3px;text-transform:uppercase;letter-spacing:0.8px;}
+
+.section-hd{font-family:'Space Mono',monospace;font-size:11px;color:#3a5a78;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.section-hd::after{content:'';flex:1;height:1px;background:rgba(0,210,255,0.08);}
+
+.repos-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px;}
+.repo{background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:14px 16px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.repo::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#00d2ff,#7b2ff7);transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+.repo:hover{border-color:rgba(0,210,255,0.2);background:rgba(0,210,255,0.04);}
+.repo:hover::before{transform:scaleX(1);}
+.repo-name{font-family:'Space Mono',monospace;font-size:13px;color:#7ac8f0;margin-bottom:4px;}
+.repo-desc{font-size:12px;color:#3a5a78;line-height:1.4;margin-bottom:10px;}
+.repo-ft{display:flex;align-items:center;gap:10px;}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+.rm{font-family:'Space Mono',monospace;font-size:10px;color:#3a5a78;}
+
+.activity{display:flex;flex-direction:column;gap:8px;}
+.act-item{display:flex;align-items:center;gap:12px;padding:10px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:7px;}
+.act-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.act-info{flex:1;}
+.act-title{font-size:12px;color:#8ba8c4;line-height:1.4;}
+.act-title b{color:#c8e0f4;font-weight:600;}
+.act-time{font-family:'Space Mono',monospace;font-size:10px;color:#2a4a62;margin-top:2px;}
+</style>
+
+<div class="app">
+  <div class="grid-bg"></div>
+
+  <!-- LOGIN -->
+  <div class="screen" id="loginScreen">
+    <div class="login-screen">
+      <div class="logo">
+        <div class="logo-icon">⬡</div>
+        GitHub
+      </div>
+      <div class="logo-sub">Developer Platform</div>
+
+      <div class="login-card">
+        <div class="login-title">Iniciar sesión</div>
+        <div class="login-sub">Accede a tu cuenta de GitHub</div>
+
+        <div class="field">
+          <label>Usuario o email</label>
+          <input type="text" id="userInput" placeholder="tu@email.com" />
+        </div>
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" id="passInput" placeholder="••••••••" />
+        </div>
+        <div class="forgot"><a>¿Olvidaste tu contraseña?</a></div>
+
+        <button class="btn-login" onclick="doLogin()">Entrar →</button>
+        <div class="err" id="errMsg">Usuario o contraseña incorrectos</div>
+
+        <div class="divider-or"><span>o</span></div>
+
+        <button class="btn-gh" onclick="doLogin()">
+          <svg class="gh-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          Continuar con GitHub
+        </button>
+
+        <div class="signup-link">¿No tienes cuenta? <a>Regístrate gratis</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="screen hidden" id="dashScreen">
+    <div class="dash-screen">
+      <div class="topbar">
+        <div class="top-logo">
+          <div class="top-logo-icon">⬡</div>
+          GitHub
+        </div>
+        <div class="top-nav">
+          <button class="nav-btn active">Inicio</button>
+          <button class="nav-btn">Repos</button>
+          <button class="nav-btn">Issues</button>
+          <button class="nav-btn">Pull Requests</button>
+          <button class="nav-btn">Explorar</button>
+        </div>
+        <div class="top-user">
+          <div class="user-avatar" id="avatarCircle">TU</div>
+          <button class="btn-out" onclick="doLogout()">Salir</button>
+        </div>
+      </div>
+
+      <div class="dash-content">
+        <div class="welcome-bar">
+          <div class="welcome-text">Bienvenido, <span id="welcomeName">Usuario</span></div>
+          <div class="online-badge"><div class="pulse-g"></div>En línea</div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat"><div class="stat-n">48</div><div class="stat-l">Repos</div></div>
+          <div class="stat"><div class="stat-n">312</div><div class="stat-l">Seguidores</div></div>
+          <div class="stat"><div class="stat-n">1.2k</div><div class="stat-l">Stars</div></div>
+          <div class="stat"><div class="stat-n">7</div><div class="stat-l">PRs abiertos</div></div>
+        </div>
+
+        <div class="section-hd">Repositorios destacados</div>
+        <div class="repos-grid">
+          <div class="repo">
+            <div class="repo-name">proyecto-alpha</div>
+            <div class="repo-desc">API REST con autenticación JWT y Redis cache.</div>
+            <div class="repo-ft"><span class="dot" style="background:#f7df1e;"></span><span class="rm">JavaScript · ★ 84</span></div>
+          </div>
+          <div class="repo">
+            <div class="repo-name">neural-ui</div>
+            <div class="repo-desc">Componentes React con animaciones procedurales.</div>
+            <div class="repo-ft"><span class="dot" style="background:#61dafb;"></span><span class="rm">TypeScript · ★ 217</span></div>
+          </div>
+          <div class="repo">
+            <div class="repo-name">cli-forge</div>
+            <div class="repo-desc">Toolkit para CLIs interactivas con TUI en Rust.</div>
+            <div class="repo-ft"><span class="dot" style="background:#f74c00;"></span><span class="rm">Rust · ★ 156</span></div>
+          </div>
+          <div class="repo">
+            <div class="repo-name">devops-grid</div>
+            <div class="repo-desc">Infraestructura como código con Terraform.</div>
+            <div class="repo-ft"><span class="dot" style="background:#7b42bc;"></span><span class="rm">HCL · ★ 43</span></div>
+          </div>
+        </div>
+
+        <div class="section-hd">Actividad reciente</div>
+        <div class="activity">
+          <div class="act-item">
+            <div class="act-icon" style="background:rgba(0,210,255,0.1);color:#00d2ff;">⬆</div>
+            <div class="act-info">
+              <div class="act-title">Push a <b>neural-ui</b> — "Fix animation timing on mobile"</div>
+              <div class="act-time">hace 23 minutos</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-icon" style="background:rgba(123,47,247,0.12);color:#b48aff;">⤷</div>
+            <div class="act-info">
+              <div class="act-title">PR mergeada en <b>proyecto-alpha</b> — "Add rate limiting middleware"</div>
+              <div class="act-time">hace 2 horas</div>
+            </div>
+          </div>
+          <div class="act-item">
+            <div class="act-icon" style="background:rgba(0,255,136,0.08);color:#00ff88;">★</div>
+            <div class="act-info">
+              <div class="act-title"><b>devs-org</b> le dio star a <b>cli-forge</b></div>
+              <div class="act-time">hace 5 horas</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function doLogin(){
+  const u = document.getElementById('userInput').value.trim();
+  const p = document.getElementById('passInput').value;
+  const err = document.getElementById('errMsg');
+  if(!u || !p){ err.style.display='block'; return; }
+  err.style.display='none';
+  const name = u.includes('@') ? u.split('@')[0] : u;
+  const initials = name.slice(0,2).toUpperCase();
+  document.getElementById('welcomeName').textContent = name;
+  document.getElementById('avatarCircle').textContent = initials;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('dashScreen').classList.remove('hidden');
+}
+function doLogout(){
+  document.getElementById('dashScreen').classList.add('hidden');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('userInput').value='';
+  document.getElementById('passInput').value='';
+}
+document.getElementById('passInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('userInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+</script>
